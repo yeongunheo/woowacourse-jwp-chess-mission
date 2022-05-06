@@ -7,6 +7,7 @@ import chess.web.dto.PlayResultDto;
 import chess.web.dto.RoomDto;
 import chess.web.dto.ScoreDto;
 import chess.web.service.ChessGameService;
+import java.net.URI;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,9 +37,9 @@ public class ChessGameRestController {
     }
 
     @PostMapping()
-    public ResponseEntity createRoom(@RequestBody CreateRoomDto createRoomDto) {
+    public ResponseEntity<RoomDto> createRoom(@RequestBody CreateRoomDto createRoomDto) {
         final RoomDto roomDto = service.createRoom(createRoomDto);
-        return new ResponseEntity(roomDto, HttpStatus.CREATED);
+        return ResponseEntity.created(URI.create("/chess-games/" + roomDto.getRoomNumber())).body(roomDto);
     }
 
     @GetMapping()
