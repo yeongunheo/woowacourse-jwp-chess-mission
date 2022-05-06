@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <title>체스 게임</title>
+  <link rel="stylesheet" href="/src/index.css">
+  <script src="/src/index.js"></script>
+</head>
+
+<body>
+<div id="app">
+  <h1>♟️체스</h1>
+  <section id="chess-game-list">
+    <h1>체스게임 리스트</h1>
+    <div>
+        방제목: <input type="text" name="roomName" id="room-name">
+        비밀번호: <input type="password" name="password" id="room-password">
+        <button class="create-room" onclick="createGameButton()">생성하기</button>
+    </div>
+    <br/>
+
+    <template>
+      <tr>
+        <td></td>
+        <td><a href=""></a></td>
+      </tr>
+    </template>
+
+    <table class="chess-room-list">
+      <thead>
+      <tr>
+        <td>번호</td>
+        <td>제목</td>
+        <td>삭제하기</td>
+      </tr>
+      </thead>
+      <tbody class="tbody-list">
+      </tbody>
+    </table>
+  </section>
+  <hr />
+
+</div>
+</body>
+
+</html>
