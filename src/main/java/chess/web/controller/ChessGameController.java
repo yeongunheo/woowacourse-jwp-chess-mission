@@ -21,13 +21,13 @@ public class ChessGameController {
         return new ModelAndView("index", HttpStatus.OK);
     }
 
-    @GetMapping("/chess-game/{id}")
+    @GetMapping("/chess-games/{id}")
     public ModelAndView play(@PathVariable int id) {
         ModelAndView modelAndView = new ModelAndView("game");
         return modelAndView;
     }
 
-    @GetMapping("/chess-game/{id}/end")
+    @GetMapping("/chess-games/{id}/end")
     public ModelAndView end(@PathVariable int id) {
         ModelAndView modelAndView = new ModelAndView("finished");
         return modelAndView;

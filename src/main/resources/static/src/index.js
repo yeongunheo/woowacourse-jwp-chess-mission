@@ -10,7 +10,7 @@ function createGameButton() {
         return alert('이름은 다섯글자 이하로 입력해주세요.');
     }
 
-    fetch('/chess-game', {
+    fetch('/chess-games', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -73,7 +73,7 @@ const JsonSender = {
 }
 
 function play(id) {
-    window.location.replace("/chess-game/" + id);
+    window.location.replace("/chess-games/" + id);
 }
 
 async function deleteGameButton(id) {
@@ -84,7 +84,7 @@ async function deleteGameButton(id) {
 }
 
 async function confirmPassword(id, password) {
-    await fetch('/chess-game/' + id + '/password', {
+    await fetch('/chess-games/' + id + '/password', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -95,7 +95,7 @@ async function confirmPassword(id, password) {
     })
     .then(handleDeleteErrors)
     .then(() => {
-        fetch('/chess-game/' + id, {
+        fetch('/chess-games/' + id, {
             method: 'DELETE',
         });
         alert("방 삭제가 완료되었습니다.");

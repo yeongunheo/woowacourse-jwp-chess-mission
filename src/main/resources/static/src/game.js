@@ -3,7 +3,7 @@ const id = pathNames[2];
 let positions = "";
 
 window.onload = async () => {
-    let data = await fetch("/chess-game/" + id + "/board", {
+    let data = await fetch("/chess-games/" + id + "/board", {
         method: "GET"
     })
     .then(r=>r.json())
@@ -27,7 +27,7 @@ const move = async function (position) {
 
 const JsonSender = {
     sendSourceTarget: function(source, target) {
-        fetch('/chess-game', {
+        fetch('/chess-games', {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -43,7 +43,7 @@ const JsonSender = {
         .then(data => {
             if (data.isFinished === true) {
                 alert(data.turn + "이 승리하였습니다!!!");
-                window.location.replace("/chess-game/" + id + "/end");
+                window.location.replace("/chess-games/" + id + "/end");
                 return;
             }
 
@@ -116,8 +116,8 @@ function lobby() {
 }
 
 async function start() {
-    await fetch("/chess-game/" + id + "/initialization", {
-        method: "GET"
+    await fetch("/chess-games/" + id + "/initialization", {
+        method: "PUT"
     });
 
     window.location.reload();
