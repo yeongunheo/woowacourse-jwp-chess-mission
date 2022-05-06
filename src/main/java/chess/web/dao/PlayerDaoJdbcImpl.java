@@ -18,7 +18,7 @@ public class PlayerDaoJdbcImpl implements PlayerDao {
 
     @Override
     public void save(Color color) {
-        final String sql = "insert into player (color) values (?)";
+        final String sql = "INSERT INTO player (color) VALUES (?)";
         this.jdbcTemplate.update(
                 sql,
                 color.name());
@@ -26,7 +26,7 @@ public class PlayerDaoJdbcImpl implements PlayerDao {
 
     @Override
     public void saveById(int id, Color color) {
-        final String sql = "insert into player (id, color) values (?, ?)";
+        final String sql = "INSERT INTO player (id, color) VALUES (?, ?)";
         this.jdbcTemplate.update(
                 sql,
                 id,
@@ -35,26 +35,26 @@ public class PlayerDaoJdbcImpl implements PlayerDao {
 
     @Override
     public void deleteAll() {
-        final String sql = "delete from player";
+        final String sql = "DELETE FROM player";
         this.jdbcTemplate.update(sql);
     }
 
     @Override
     public void deleteById(int id) {
-        final String sql = "delete from player where id = " + id;
+        final String sql = "DELETE FROM player WHERE id = " + id;
         this.jdbcTemplate.update(sql);
     }
 
     @Override
     public Player findById(int id) {
-        final String sql = "select color from player where id = " + id;
+        final String sql = "SELECT color FROM player WHERE id = " + id;
         String color = jdbcTemplate.queryForObject(sql, String.class);
         return Player.of(Color.of(color));
     }
 
     @Override
     public Player getPlayer() {
-        final String sql = "select color from player";
+        final String sql = "SELECT color FROM player";
         String color = jdbcTemplate.queryForObject(sql, String.class);
         return Player.of(Color.of(color));
     }

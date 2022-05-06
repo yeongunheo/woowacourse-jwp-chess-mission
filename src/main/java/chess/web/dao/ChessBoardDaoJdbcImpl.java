@@ -32,7 +32,7 @@ public class ChessBoardDaoJdbcImpl implements ChessBoardDao {
 
     @Override
     public void save(Position position, Piece piece) {
-        final String sql = "insert into board (position, piece) values (?, ?)";
+        final String sql = "INSERT INTO board (position, piece) VALUES (?, ?)";
         this.jdbcTemplate.update(
                 sql,
                 position.toString(),
@@ -41,7 +41,7 @@ public class ChessBoardDaoJdbcImpl implements ChessBoardDao {
 
     @Override
     public void saveById(int id, Position position, Piece piece) {
-        final String sql = "insert into board (id, position, piece) values (?, ?, ?)";
+        final String sql = "INSERT INTO board (id, position, piece) VALUES (?, ?, ?)";
         this.jdbcTemplate.update(
                 sql,
                 id,
@@ -51,19 +51,19 @@ public class ChessBoardDaoJdbcImpl implements ChessBoardDao {
 
     @Override
     public void deleteAll() {
-        final String sql = "delete from board";
+        final String sql = "DELETE FROM board";
         this.jdbcTemplate.update(sql);
     }
 
     @Override
     public void deleteById(int id) {
-        final String sql = "delete from board where id = " + id;
+        final String sql = "DELETE FROM board WHERE id = " + id;
         this.jdbcTemplate.update(sql);
     }
 
     @Override
     public Map<Position, Piece> findAll() {
-        final String sql = "select position, piece from board";
+        final String sql = "SELECT position, piece FROM board";
         List<ChessBoardDto> chessBoardDtos = jdbcTemplate.query(sql, actorRowMapper);
 
         Map<Position, Piece> board = new HashMap<>();
@@ -78,7 +78,7 @@ public class ChessBoardDaoJdbcImpl implements ChessBoardDao {
 
     @Override
     public Map<Position, Piece> findById(int id) {
-        final String sql = "select position, piece from board where id = " + id;
+        final String sql = "SELECT position, piece FROM board WHERE id = " + id;
         List<ChessBoardDto> chessBoardDtos = jdbcTemplate.query(sql, actorRowMapper);
 
         Map<Position, Piece> board = new HashMap<>();

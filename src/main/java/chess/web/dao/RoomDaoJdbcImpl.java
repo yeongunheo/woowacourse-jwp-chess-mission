@@ -36,7 +36,7 @@ public class RoomDaoJdbcImpl implements RoomDao {
     @Override
     public int save(RoomName name, RoomPassword password) {
         final String encodePassword = passwordEncoder.encode(password.getPassword());
-        final String sql = "insert into room (name, password) values (?, ?)";
+        final String sql = "INSERT INTO room (name, password) VALUES (?, ?)";
         final KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
@@ -50,7 +50,7 @@ public class RoomDaoJdbcImpl implements RoomDao {
 
     @Override
     public List<RoomDto> findAll() {
-        final String sql = "select id, name from room";
+        final String sql = "SELECT id, name FROM room";
         List<RoomDto> roomDtos = jdbcTemplate.query(sql, actorRowMapper);
 
         return roomDtos;
@@ -58,13 +58,13 @@ public class RoomDaoJdbcImpl implements RoomDao {
 
     @Override
     public void deleteById(int id) {
-        final String sql = "delete from room where id = " + id;
+        final String sql = "DELETE FROM room WHERE id = " + id;
         this.jdbcTemplate.update(sql);
     }
 
     @Override
     public boolean confirmPassword(int id, String password) {
-        final String sql = "select password from room where id = " + id;
+        final String sql = "SELECT password FROM room WHERE id = " + id;
         final String dbPassword = jdbcTemplate.queryForObject(sql, String.class);
         return passwordEncoder.matches(password, dbPassword);
     }
