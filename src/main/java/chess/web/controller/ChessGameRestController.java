@@ -57,7 +57,7 @@ public class ChessGameRestController {
     @PutMapping("/{id}/initialization")
     public ResponseEntity initialize(@PathVariable int id) {
         service.start(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}/status")
@@ -69,7 +69,7 @@ public class ChessGameRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteRoom(@PathVariable int id) {
         service.deleteRoomById(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/password")
@@ -78,7 +78,6 @@ public class ChessGameRestController {
         if (!result) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }
