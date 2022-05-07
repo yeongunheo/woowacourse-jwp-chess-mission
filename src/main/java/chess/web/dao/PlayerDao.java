@@ -5,15 +5,11 @@ import chess.domain.piece.property.Color;
 
 public interface PlayerDao {
 
-    void save(Color color);
-
-    void saveById(int id, Color of);
-
-    Player getPlayer();
+    int save(int id, Color color);
 
     void deleteAll();
 
-    Player findById(int id);
-
     void deleteById(int id);
+
+    Player findById(int id);
 }

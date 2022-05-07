@@ -1,22 +1,22 @@
-create table board
+CREATE TABLE room
 (
-    id int(10) not null,
-    position varchar(2) not null,
-    piece varchar(10) not null,
-    constraint board_PK primary key (id, position),
-    foreign key board_FK (id) REFERENCES room(id) on delete cascade
+    id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(5) NOT NULL,
+    password VARCHAR(100) NOT NULL
 );
 
-create table player
+CREATE TABLE board
 (
-    id int(10) not null primary key,
-    color varchar(5) not null,
-    foreign key player_FK (id) REFERENCES room(id) on delete cascade
+    id INT(10) NOT NULL,
+    position VARCHAR(2) NOT NULL,
+    piece VARCHAR(10) NOT NULL,
+    CONSTRAINT board_PK PRIMARY KEY (id, position),
+    FOREIGN KEY (id) REFERENCES room(id) ON DELETE CASCADE
 );
 
-create table room
+CREATE TABLE player
 (
-    id int(10) not null AUTO_INCREMENT primary key,
-    name varchar(5) not null,
-    password varchar(100) not null
+    id INT(10) NOT NULL PRIMARY KEY,
+    color VARCHAR (5) NOT NULL,
+    FOREIGN KEY (id) REFERENCES room(id) ON DELETE CASCADE
 );

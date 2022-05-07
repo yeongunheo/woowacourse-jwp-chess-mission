@@ -25,14 +25,6 @@ public class RoomDaoJdbcImpl implements RoomDao {
         this.passwordEncoder = passwordEncoder;
     }
 
-    private final RowMapper<RoomDto> actorRowMapper = (resultSet, rowNum) -> {
-        RoomDto roomDto = RoomDto.of(
-                Integer.parseInt(resultSet.getString("id")),
-                RoomName.of(resultSet.getString("name"))
-        );
-        return roomDto;
-    };
-
     @Override
     public int save(RoomName name, RoomPassword password) {
         final String encodePassword = passwordEncoder.encode(password.getPassword());
@@ -41,7 +33,7 @@ public class RoomDaoJdbcImpl implements RoomDao {
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, name.getRoomName());
-            ps.setString(2, password.getPassword());
+            ps.setString(2, encodePassword);
             return ps;
         }, keyHolder);
 
@@ -51,9 +43,7 @@ public class RoomDaoJdbcImpl implements RoomDao {
     @Override
     public List<RoomDto> findAll() {
         final String sql = "SELECT id, name FROM room";
-        List<RoomDto> roomDtos = jdbcTemplate.query(sql, actorRowMapper);
-
-        return roomDtos;
+        return jdbcTemplate.query(sql, actorRowMapper);
     }
 
     @Override
@@ -64,8 +54,16 @@ public class RoomDaoJdbcImpl implements RoomDao {
 
     @Override
     public boolean confirmPassword(int id, String password) {
-        final String sql = "SELECT password FROM room WHERE id = " + id;
-        final String dbPassword = jdbcTemplate.queryForObject(sql, String.class);
+        final String sql = "SELECT password FROM room WHERE id = ?";
+        final String dbPassword = jdbcTemplate.queryForObject(sql, String.class, id);
         return passwordEncoder.matches(password, dbPassword);
     }
+
+    private RowMapper<RoomDto> actorRowMapper = (resultSet, rowNum) -> {
+        RoomDto roomDto = RoomDto.of(
+                Integer.parseInt(resultSet.getString("id")),
+                RoomName.of(resultSet.getString("name"))
+        );
+        return roomDto;
+    };
 }

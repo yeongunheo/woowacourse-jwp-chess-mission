@@ -8,35 +8,47 @@ import java.util.Map;
 
 public class FakeChessBoardDao implements ChessBoardDao {
 
-    Map<Position, Piece> repository = new HashMap<>();
+    private Map<Integer, Map<Position, Piece>> board;
 
-    @Override
-    public void save(Position position, Piece piece) {
-        repository.put(position, piece);
+    public FakeChessBoardDao() {
+        board = new HashMap<>();
     }
 
     @Override
-    public void saveById(int id, Position position, Piece piece) {
+    public int save(int id, Position position, Piece piece) {
+        Map<Position, Piece> positionAndPiece = new HashMap<>();
+        positionAndPiece.put(position, piece);
 
+        board.put(id, positionAndPiece);
+
+        return id;
     }
 
     @Override
     public void deleteAll() {
-        repository.clear();
+        board.clear();
     }
 
     @Override
     public void deleteById(int id) {
-
+        board.remove(id);
     }
 
     @Override
     public Map<Position, Piece> findAll() {
-        return repository;
+        Map<Position, Piece> result = new HashMap<>();
+        for (int id : board.keySet()) {
+            Map<Position, Piece> positionAndPieces = board.get(id);
+            for (Position position : positionAndPieces.keySet()) {
+                result.put(position, positionAndPieces.get(position));
+            }
+        }
+
+        return result;
     }
 
     @Override
     public Map<Position, Piece> findById(int id) {
-        return null;
+        return board.get(id);
     }
 }
