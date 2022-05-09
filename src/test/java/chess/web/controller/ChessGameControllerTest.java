@@ -2,14 +2,12 @@ package chess.web.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import chess.domain.piece.StartedPawn;
 import chess.domain.piece.position.Position;
 import chess.domain.piece.property.Color;
-import chess.domain.room.RoomName;
-import chess.domain.room.RoomPassword;
 import chess.web.dao.ChessBoardDao;
 import chess.web.dao.PlayerDao;
 import chess.web.dao.RoomDao;
@@ -52,51 +50,63 @@ public class ChessGameControllerTest {
     }
 
     @Test
-    void getRoot() throws Exception {
+    void root() throws Exception {
         this.mockMvc.perform(get("/").accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void getStart() throws Exception {
-        this.mockMvc.perform(get("/start").accept(MediaType.TEXT_HTML))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/play"));
-    }
-
-    @Test
-    void getPlay() throws Exception {
-        this.mockMvc.perform(get("/play").accept(MediaType.TEXT_HTML))
+    void play() throws Exception {
+        final int boardId = 1;
+        this.mockMvc.perform(get("/chess-games/" + boardId).accept(MediaType.TEXT_HTML))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void postMove() throws Exception {
-        chessBoardDao.save(Position.of("a2"), new StartedPawn(Color.WHITE));
+    void end() throws Exception {
+        final int boardId = 1;
+        this.mockMvc.perform(get("/chess-games/" + boardId + "/end").accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void move() throws Exception {
+        final int boardId = 1;
+        playerDao.save(boardId, Color.WHITE);
+
+        chessBoardDao.save(1, Position.of("a2"), new StartedPawn(Color.WHITE));
         String content = objectMapper.writeValueAsString(new MoveDto(1, "a2", "a4"));
 
-        this.mockMvc.perform(post("/move")
+        this.mockMvc.perform(put("/chess-games/")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        playerDao.deleteAll();
     }
 
     @Test
-    void getEnd() throws Exception {
-        this.mockMvc.perform(get("/end").accept(MediaType.TEXT_HTML))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void createChessGame() throws Exception {
-        roomDao.save(RoomName.of("첫번째게임"), RoomPassword.of("1234"));
+    void createRoom() throws Exception {
         String content = objectMapper.writeValueAsString(new CreateRoomDto("첫번째게임", "1234"));
 
-        this.mockMvc.perform(post("/chess-game")
+        this.mockMvc.perform(post("/chess-games")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    void loadRoom() throws Exception {
+        this.mockMvc.perform(get("/chess-games").accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void initialize() throws Exception {
+        final int boardId = 1;
+        this.mockMvc.perform(put("/chess-games/" + boardId + "/initialization").accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk());
     }
 }
