@@ -1,11 +1,9 @@
 package chess.web.controller;
 
 import chess.web.service.ChessGameService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ChessGameController {
@@ -17,19 +15,17 @@ public class ChessGameController {
     }
 
     @GetMapping("/")
-    public ModelAndView index() {
-        return new ModelAndView("index", HttpStatus.OK);
+    public String index() {
+        return "index";
     }
 
-    @GetMapping("/chess-game/{id}")
-    public ModelAndView play(@PathVariable int id) {
-        ModelAndView modelAndView = new ModelAndView("game");
-        return modelAndView;
+    @GetMapping("/chess-games/{id}")
+    public String play(@PathVariable int id) {
+        return "game";
     }
 
-    @GetMapping("/chess-game/{id}/end")
-    public ModelAndView end(@PathVariable int id) {
-        ModelAndView modelAndView = new ModelAndView("finished");
-        return modelAndView;
+    @GetMapping("/chess-games/{id}/end")
+    public String end(@PathVariable int id) {
+        return "finished";
     }
 }

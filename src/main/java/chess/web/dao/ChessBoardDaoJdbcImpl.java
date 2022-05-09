@@ -22,72 +22,54 @@ public class ChessBoardDaoJdbcImpl implements ChessBoardDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private final RowMapper<ChessBoardDto> actorRowMapper = (resultSet, rowNum) -> {
+    @Override
+    public int save(int id, Position position, Piece piece) {
+        final String sql = "INSERT INTO board (id, position, piece) VALUES (?, ?, ?)";
+        this.jdbcTemplate.update(sql, String.valueOf(id), position.toString(), piece.toString());
+
+        return id;
+    }
+
+    @Override
+    public void deleteAll() {
+        final String sql = "DELETE FROM board";
+        this.jdbcTemplate.update(sql);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        final String sql = "DELETE FROM board WHERE id = ?";
+        this.jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public Map<Position, Piece> findAll() {
+        final String sql = "SELECT position, piece FROM board";
+        return selectPositionAndPiece(sql);
+    }
+
+    @Override
+    public Map<Position, Piece> findById(int id) {
+        final String sql = "SELECT position, piece FROM board WHERE id = " + id;
+        return selectPositionAndPiece(sql);
+    }
+
+    private Map<Position, Piece> selectPositionAndPiece(String sql) {
+        List<ChessBoardDto> chessBoardDtos = jdbcTemplate.query(sql, actorRowMapper);
+        Map<Position, Piece> board = new HashMap<>();
+        for (ChessBoardDto boardDto : chessBoardDtos) {
+            String position = boardDto.getPosition();
+            String piece = boardDto.getPiece();
+            board.put(Position.of(position), PieceFactory.of(position, piece));
+        }
+        return board;
+    }
+
+    private RowMapper<ChessBoardDto> actorRowMapper = (resultSet, rowNum) -> {
         ChessBoardDto board = new ChessBoardDto(
                 resultSet.getString("position"),
                 resultSet.getString("piece")
         );
         return board;
     };
-
-    @Override
-    public void save(Position position, Piece piece) {
-        final String sql = "insert into board (position, piece) values (?, ?)";
-        this.jdbcTemplate.update(
-                sql,
-                position.toString(),
-                piece.toString());
-    }
-
-    @Override
-    public void saveById(int id, Position position, Piece piece) {
-        final String sql = "insert into board (id, position, piece) values (?, ?, ?)";
-        this.jdbcTemplate.update(
-                sql,
-                id,
-                position.toString(),
-                piece.toString());
-    }
-
-    @Override
-    public void deleteAll() {
-        final String sql = "delete from board";
-        this.jdbcTemplate.update(sql);
-    }
-
-    @Override
-    public void deleteById(int id) {
-        final String sql = "delete from board where id = " + id;
-        this.jdbcTemplate.update(sql);
-    }
-
-    @Override
-    public Map<Position, Piece> findAll() {
-        final String sql = "select position, piece from board";
-        List<ChessBoardDto> chessBoardDtos = jdbcTemplate.query(sql, actorRowMapper);
-
-        Map<Position, Piece> board = new HashMap<>();
-        for (ChessBoardDto boardDto : chessBoardDtos) {
-            String position = boardDto.getPosition();
-            String piece = boardDto.getPiece();
-            board.put(Position.of(position), PieceFactory.of(position, piece));
-        }
-
-        return board;
-    }
-
-    @Override
-    public Map<Position, Piece> findById(int id) {
-        final String sql = "select position, piece from board where id = " + id;
-        List<ChessBoardDto> chessBoardDtos = jdbcTemplate.query(sql, actorRowMapper);
-
-        Map<Position, Piece> board = new HashMap<>();
-        for (ChessBoardDto boardDto : chessBoardDtos) {
-            String position = boardDto.getPosition();
-            String piece = boardDto.getPiece();
-            board.put(Position.of(position), PieceFactory.of(position, piece));
-        }
-
-        return board;
-    }
 }

@@ -2,7 +2,7 @@ const pathNames = window.location.pathname.split("/");
 const id = pathNames[2];
 
 window.onload = async () => {
-    const data = await fetch("/chess-game/" + id + "/status", {
+    const data = await fetch("/chess-games/" + id + "/status", {
         method: "GET"
     })
     .then(r=>r.json())
@@ -33,9 +33,9 @@ function lobby() {
 }
 
 async function start() {
-    await fetch("/chess-game/" + id + "/initialization", {
-        method: "GET"
+    await fetch("/chess-games/" + id + "/initialization", {
+        method: "PUT"
     });
 
-    window.location.replace("/chess-game/" + id);
+    window.location.replace("/chess-games/" + id);
 }

@@ -29,4 +29,9 @@ public enum Color {
     public boolean isSameColor(Color color) {
         return this == color;
     }
+
+    @Override
+    public String toString() {
+        return name();
+    }
 }

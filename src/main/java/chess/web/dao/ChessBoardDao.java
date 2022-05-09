@@ -6,9 +6,7 @@ import java.util.Map;
 
 public interface ChessBoardDao {
 
-    void save(Position position, Piece piece);
-
-    void saveById(int id, Position position, Piece piece);
+    int save(int id, Position position, Piece piece);
 
     void deleteAll();
 

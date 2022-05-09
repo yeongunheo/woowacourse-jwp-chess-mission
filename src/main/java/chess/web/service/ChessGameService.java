@@ -87,7 +87,15 @@ public class ChessGameService {
         return roomDao.findAll();
     }
 
-    public ChessGame getOneChessGame(int id) {
+    public void deleteRoomById(int id) {
+        roomDao.deleteById(id);
+    }
+
+    public boolean confirmPassword(int id, String password) {
+        return roomDao.confirmPassword(id, password);
+    }
+
+    private ChessGame getOneChessGame(int id) {
         return ChessGame.of(new RunningGame(ChessBoard.of(findOneBoard(id)), findOneTurn(id)));
     }
 
@@ -120,16 +128,8 @@ public class ChessGameService {
     private void saveById(ChessGame chessGame, int id) {
         Map<Position, Piece> chessBoard = chessGame.getBoard();
         for (Position position : chessBoard.keySet()) {
-            chessBoardDao.saveById(id, position, chessBoard.get(position));
+            chessBoardDao.save(id, position, chessBoard.get(position));
         }
-        playerDao.saveById(id, Color.of(chessGame.getTurn()));
-    }
-
-    public void deleteRoomById(int id) {
-        roomDao.deleteById(id);
-    }
-
-    public boolean confirmPassword(int id, String password) {
-        return roomDao.confirmPassword(id, password);
+        playerDao.save(id, Color.of(chessGame.getTurn()));
     }
 }
